@@ -9,22 +9,22 @@ googleAnalytics = "UA-133194833-1"
 
 [params]
   #logo = "/images/finbits.png"
-  description ="A blog by Randy Findley about software engineering, parenting, and coooking."
+  description ="A blog by Randy Findley about Software Engineering, Product Development, and Entrepreneurship"
   mailchimp = "https://finbits.us20.list-manage.com/subscribe/post?u=0f73aadf04d1683fa8b417ffd&amp;id=b5004f6887"
   mailprotect = "b_0f73aadf04d1683fa8b417ffd_b5004f6887"
 
 [params.author]
   name = "Randy Findley"
   thumbnail = "/images/randy-findley.jpeg"
-  description = "Loves his wife, kids, & building software..."
+  description = "Loves building software, selling products, and starting companies..."
 
 [params.index]
   picture = "/images/randy-findley.jpeg"
   title = "Randy Findley"
-  subtitle = "I love my wife, my kids, & building software.  I also like cooking soup."
+  subtitle = "A blog by Randy Findley about Software Engineering, Product Development, and Entrepreneurship"
   mdtext = '''
 Thanks for stumbling upon my blog.  
-Please join me as I navigate this life as a father, software engineer, and chef.
+Please join me as I navigate this life as an Software Engineer and Entrepreneur.
 '''
   alertbar = true
 

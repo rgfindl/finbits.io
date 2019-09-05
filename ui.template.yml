@@ -95,16 +95,10 @@ Resources:
           MinTTL: 0
           AllowedMethods:
             - 'HEAD'
-            - 'DELETE'
-            - 'POST'
             - 'GET'
-            - 'OPTIONS'
-            - 'PUT'
-            - 'PATCH'
           CachedMethods:
             - 'HEAD'
             - 'GET'
-            - 'OPTIONS'
           ForwardedValues:
             QueryString: false
             Cookies:
