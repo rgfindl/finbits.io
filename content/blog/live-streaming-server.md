@@ -15,6 +15,9 @@ I wanted users to be able to stream anytime using their private stream key.  Muc
 
 I also wanted the live stream recorded and I wanted the user to be able to relay their live stream to other destinations like Twitch, Facebook, and YouTube.
 
+Here is a screenshot of my stream playing in the browser, facebook, twitch, and youtube.
+![](/images/blog/live-streaming-server-example.png "Example")
+
 The final architecture is actually 3 services: Proxy -> Server <- Origin
 
 I will cover the Proxy and the Origin in posts [2](/blog/live-streaming-proxy) and [3](/blog/live-streaming-origin) in this blog post series.
@@ -453,13 +456,17 @@ const init = async () => {
           1000 : 
           2 * 60 * 1000;
         await utils.timeout(timeoutMs);
-        try {
-          // Cleanup directory
-          logger.log('[Delete HLS Directory]', `dir=${join(config.http.mediaroot, name)}`);
-          this.streams.delete(name);
-          fs.rmdirSync(join(config.http.mediaroot, name));
-        } catch (err) {
-          logger.error(err);
+        if (!_.isEqual(await cache.get(name), SERVER_ADDRESS)) {
+          // Only clean up if the stream isn't running.  
+          // The user could have terminated then started again.
+          try {
+            // Cleanup directory
+            logger.log('[Delete HLS Directory]', `dir=${join(config.http.mediaroot, name)}`);
+            this.streams.delete(name);
+            fs.rmdirSync(join(config.http.mediaroot, name));
+          } catch (err) {
+            logger.error(err);
+          }
         }
       } else if (StreamPath.indexOf('/stream/') != -1) {
         //
@@ -561,7 +568,7 @@ nms.on('preConnect', (id, args) => {
 
 ### NGINX
 
-We use NGINX as a reverse proxy to serve the static HLS files.  It has better performance that express.js.  
+We use NGINX as a reverse proxy to serve the static HLS files.  It has better performance than express.js.  
 
 ```
 worker_processes  auto;

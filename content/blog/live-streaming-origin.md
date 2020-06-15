@@ -221,6 +221,43 @@ When the service starts we fetch the list of Servers (IP:PORT) and add them to t
 
 We then run a cron job to perform this action again, to pick up any new Servers.  NGINX is reloaded with zero downtime.
 
+## Service
+
+Now it's time to deploy our Origin.
+
+The Origin service has 2 stacks:
+
+- [ecr](https://github.com/rgfindl/live-streaming-origin/blob/master/origin/stacks/ecr.stack.yml) - Docker image registry
+- [service](https://github.com/rgfindl/live-streaming-origin/blob/master/origin/stacks/service.stack.yml) - Fargate service
+
+First create the docker ECR registry.
+
+```
+sh ./stack-up.sh ecr
+```
+
+Now we can build, tag, and push the Docker image to the registry.  
+
+First update the [package.json](https://github.com/rgfindl/live-streaming-origin/blob/master/origin/package.json#L9-L13) scripts to include your AWS account id.
+
+To build, tag, and push the Docker image to the registry, run the following command.
+
+```
+yarn run deploy <version>
+```
+
+Now we can deploy the service stack which will deploy our new image to Fargate.
+
+First update the `Version` [here](https://github.com/rgfindl/live-streaming-origin/blob/master/origin/stacks/stack-up.sh#L21).
+
+Then run:
+
+```
+sh ./stack-up.sh service
+```
+
+Your Origin should now be running in your ECS cluster as a Fargate task.  
+
 In conclusion... I think this architecture and implementation works pretty well.  It hasn't been battle tested.  Here are some things I'd still like to do and some areas for improvement.
 
 1.) Test with more clients & videos.

@@ -34,7 +34,7 @@ Why not just redirect RTMP directly to the Servers?  This would be great but RTM
 
 So, how do we route __stateful__ RTMP traffic to a fleet of RTMP Servers?
 
-We can use HAProxy and weighted Route53 DNS routing.  We could have n number of Origin (HAProxy) services running, all with public IPs, and them route traffic to all instances via Route53 weighted record sets.
+We can use HAProxy and weighted Route53 DNS routing.  We could have n number of Origin (HAProxy) services running, all with public IPs, and then route traffic to all instances via Route53 weighted record sets.
 
 The only gotcha with this service is making sure it picks up any new Servers that are added to handle load.
 
@@ -119,5 +119,42 @@ The backend does the routing magic.  In our case it uses a simple `roundrobin` l
 __http__
 
 The http frontend and backend serve a static http response for our Route 53 healthcheck.
+
+## Service
+
+Now it's time to deploy our Proxy.
+
+The Proxy service has 2 stacks:
+
+- [ecr](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/ecr.stack.yml) - Docker image registry
+- [service](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/service.stack.yml) - Fargate service
+
+First create the docker ECR registry.
+
+```
+sh ./stack-up.sh ecr
+```
+
+Now we can build, tag, and push the Docker image to the registry.  
+
+First update the [package.json](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/package.json#L9-L13) scripts to include your AWS account id.
+
+To build, tag, and push the Docker image to the registry, run the following command.
+
+```
+yarn run deploy <version>
+```
+
+Now we can deploy the service stack which will deploy our new image to Fargate.
+
+First update the `Version` [here](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/stack-up.sh#L21).
+
+Then run:
+
+```
+sh ./stack-up.sh service
+```
+
+Your Proxy should now be running in your ECS cluster as a Fargate task.  
 
 Now on to Part 3, the [Origin](/blog/live-streaming-origin), to learn how we route HTTP traffic to the appropriate HLS Server.
