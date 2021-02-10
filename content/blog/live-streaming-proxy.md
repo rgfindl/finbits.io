@@ -126,8 +126,8 @@ Now it's time to deploy our Proxy.
 
 The Proxy service has 2 stacks:
 
-- [ecr](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/ecr.stack.yml) - Docker image registry
-- [service](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/service.stack.yml) - Fargate service
+- [ecr](https://github.com/rgfindl/live-streaming-server/blob/master/proxy/stacks/ecr.stack.yml) - Docker image registry
+- [service](https://github.com/rgfindl/live-streaming-server/blob/master/proxy/stacks/service.stack.yml) - Fargate service
 
 First create the docker ECR registry.
 
@@ -137,7 +137,7 @@ sh ./stack-up.sh ecr
 
 Now we can build, tag, and push the Docker image to the registry.  
 
-First update the [package.json](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/package.json#L9-L13) scripts to include your AWS account id.
+First update the [package.json](https://github.com/rgfindl/live-streaming-server/blob/master/proxy/package.json#L9-L13) scripts to include your AWS account id.
 
 To build, tag, and push the Docker image to the registry, run the following command.
 
@@ -147,7 +147,7 @@ yarn run deploy <version>
 
 Now we can deploy the service stack which will deploy our new image to Fargate.
 
-First update the `Version` [here](https://github.com/rgfindl/live-streaming-proxy/blob/master/proxy/stacks/stack-up.sh#L21).
+First update the `Version` [here](https://github.com/rgfindl/live-streaming-server/blob/master/proxy/stacks/stack-up.sh#L21).
 
 Then run:
 
